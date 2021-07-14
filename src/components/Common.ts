@@ -1,12 +1,6 @@
 import styled from 'styled-components'
 import tw from 'twin.macro'
 
-export const BoxDiv = styled.div<{ narrow?: boolean }>`
-  ${tw`bg-gray-100 border text-gray-600 border-gray-300 rounded-xl`}
-  ${({ narrow }) => (narrow ? tw`p-0` : tw`p-8`)}
-  font-size: 1.6rem;
-`
-
 export interface ControlProps {
   fullWidth?: boolean
   error?: boolean

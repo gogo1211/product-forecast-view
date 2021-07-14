@@ -2,7 +2,6 @@ import moment from 'moment'
 
 export const generateRandomData = (startDate: string, endDate: string, product: number) => {
   const data = []
-
   const date = moment(startDate)
 
   while (moment(endDate).isSameOrAfter(date)) {
