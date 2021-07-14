@@ -6,6 +6,7 @@ import moment from 'moment'
 
 HC_more(Highcharts)
 import { ProductItem } from 'models'
+import { LOW_PERCENT, HIGH_PERCENT } from 'helpers/constants'
 
 interface LineChartProps extends HighchartsReact.Props {
   data: ProductItem[]
@@ -13,20 +14,19 @@ interface LineChartProps extends HighchartsReact.Props {
 
 const LineChart: FC<LineChartProps> = ({ data, ...rest }) => {
   const options: Highcharts.Options = useMemo(() => {
-    const temp = data
-      .filter((item) => moment().startOf('day').isSameOrAfter(item.date))
+    const today = moment().startOf('day')
+    const lineData = data
+      .filter((item) => today.isSameOrAfter(item.date))
       .map((item) => ({ x: new Date(item.date).getTime(), y: item.value }))
 
-    const range = data
-      .filter((item) => moment().startOf('day').isSameOrBefore(item.date))
+    const rangeData = data
+      .filter((item) => today.isSameOrBefore(item.date))
       .map((item, index) => {
         if (index === 0) {
           return [new Date(item.date).getTime(), item.value, item.value]
         }
-        return [new Date(item.date).getTime(), item.value * 0.95, item.value * 1.05]
+        return [new Date(item.date).getTime(), item.value * LOW_PERCENT, item.value * HIGH_PERCENT]
       })
-
-    console.log(temp, range, new Date().getTime())
 
     return {
       title: {
@@ -35,12 +35,12 @@ const LineChart: FC<LineChartProps> = ({ data, ...rest }) => {
       series: [
         {
           type: 'line',
-          data: temp,
+          data: lineData,
           color: '#0094e0'
         },
         {
           type: 'arearange',
-          data: range,
+          data: rangeData,
           color: '#0094e0'
         }
       ],
